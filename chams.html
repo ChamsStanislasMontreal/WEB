@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAMS — Classes à Horaires Aménagés en Mathématiques et Sciences</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0a0e1a;
+    --deep: #111827;
+    --card: #161d2f;
+    --accent: #4fffb0;
+    --accent2: #ff6b6b;
+    --accent3: #ffd166;
+    --text: #e8edf7;
+    --muted: #7a889e;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--night);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 2rem 4rem;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 50%, rgba(79,255,176,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 30%, rgba(255,107,107,0.07) 0%, transparent 60%),
+      linear-gradient(180deg, #0a0e1a 0%, #0d1325 100%);
+  }
+
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    max-width: 860px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.35rem 1rem;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero h1 span { color: var(--accent); font-style: italic; }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 3rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-acronym {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-acronym span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.9rem;
+    background: rgba(79,255,176,0.08);
+    border: 1px solid rgba(79,255,176,0.2);
+    border-radius: 2px;
+    color: var(--accent);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    animation: fadeUp 1.2s 0.5s ease both;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollLine 2s ease infinite;
+  }
+
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 em { font-style: italic; color: var(--accent); }
+
+  /* WHAT IS CHAMS */
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 640px) { .what-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(79,255,176,0.3);
+    transform: translateY(-3px);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+  }
+
+  .card.red::before { background: var(--accent2); }
+  .card.yellow::before { background: var(--accent3); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  /* STATS ROW */
+  .stats-section {
+    background: var(--deep);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem;
+  }
+
+  .stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) { .stats-inner { grid-template-columns: 1fr; } }
+
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-num.green { color: var(--accent); }
+  .stat-num.red { color: var(--accent2); }
+  .stat-num.yellow { color: var(--accent3); }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  /* PEDAGOGY */
+  .pedagogy-list {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .peda-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: stretch;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+
+  .peda-item:last-child { border-bottom: none; }
+  .peda-item:hover { background: rgba(79,255,176,0.04); }
+
+  .peda-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    display: grid;
+    place-items: center;
+    border-right: 1px solid var(--border);
+    background: rgba(79,255,176,0.03);
+  }
+
+  .peda-text {
+    padding: 1.75rem 2rem;
+  }
+
+  .peda-text h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .peda-text p {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* TEACHERS */
+  .teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 700px) { .teachers-grid { grid-template-columns: 1fr; } }
+
+  .teacher-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem 1.75rem;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .teacher-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,209,102,0.3);
+  }
+
+  .teacher-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 1.75rem;
+    margin: 0 auto 1.25rem;
+  }
+
+  .teacher-icon.t1 { background: rgba(79,255,176,0.1); border: 1px solid rgba(79,255,176,0.3); }
+  .teacher-icon.t2 { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); }
+  .teacher-icon.t3 { background: rgba(255,209,102,0.1); border: 1px solid rgba(255,209,102,0.3); }
+
+  .teacher-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .teacher-card p {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  /* EQUALITY */
+  .equality-section {
+    background: linear-gradient(135deg, rgba(255,107,107,0.05), rgba(79,255,176,0.05));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4rem;
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .equality-section::before {
+    content: '50/50';
+    position: absolute;
+    right: -1rem; top: 50%;
+    transform: translateY(-50%) rotate(-10deg);
+    font-family: 'DM Serif Display', serif;
+    font-size: 8rem;
+    color: rgba(79,255,176,0.04);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .eq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  @media (max-width: 700px) { .eq-grid { grid-template-columns: 1fr; } }
+
+  .eq-bar {
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    height: 8px;
+    margin: 0.75rem 0 0.3rem;
+    overflow: hidden;
+  }
+
+  .eq-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent3));
+    transition: width 1s ease;
+  }
+
+  .eq-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .parity-visual {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .parity-block {
+    font-size: 2.5rem;
+    animation: bob 3s ease infinite;
+  }
+
+  .parity-block:nth-child(even) {
+    animation-delay: 0.5s;
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  footer .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  footer .footer-logo span { color: var(--accent); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2.5rem;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">CHAMS</a>
+  <ul class="nav-links">
+    <li><a href="#definition">Le dispositif</a></li>
+    <li><a href="#pedagogie">Pédagogie</a></li>
+    <li><a href="#enseignants">Encadrement</a></li>
+    <li><a href="#egalite">Égalité</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-content">
+    <div class="badge">Dispositif d'excellence · Collège</div>
+    <h1>Classes <span>CHAMS</span></h1>
+    <p class="hero-sub">Horaires Aménagés en Mathématiques et Sciences — pour les élèves passionnés de 4e et 3e qui veulent aller plus loin.</p>
+    <div class="hero-acronym">
+      <span>C — Classes</span>
+      <span>H — Horaires</span>
+      <span>A — Aménagés</span>
+      <span>M — Mathématiques</span>
+      <span>S — Sciences</span>
+    </div>
+  </div>
+  <div class="scroll-hint">DÉFILER</div>
+</div>
+
+<!-- DEFINITION -->
+<section id="definition">
+  <p class="section-label reveal">01 — Comprendre le dispositif</p>
+  <h2 class="reveal">Qu'est-ce qu'une classe <em>CHAMS</em> ?</h2>
+  <p class="reveal" style="color:var(--muted); max-width:620px; margin-bottom:1rem;">Les CHAMS s'adressent aux élèves volontaires de 4ᵉ et 3ᵉ qui aiment les maths, les sciences, les technologies ou le numérique. L'objectif est d'encourager la passion scientifique tout en garantissant une répartition parfaitement équilibrée entre filles et garçons.</p>
+
+  <div class="what-grid">
+    <div class="card reveal">
+      <div class="card-icon">🎯</div>
+      <h3>Pour qui ?</h3>
+      <p>Élèves volontaires de 4ᵉ et 3ᵉ passionnés par les maths, les sciences, la technologie ou le numérique. Aucun prérequis de niveau, juste de la curiosité.</p>
+    </div>
+    <div class="card reveal">
+      <div class="card-icon">🕐</div>
+      <h3>Combien d'heures ?</h3>
+      <p>L'emploi du temps classique de 26 heures est conservé, auquel s'ajoutent 2 à 3 heures hebdomadaires dédiées aux activités scientifiques spécifiques.</p>
+    </div>
+    <div class="card red reveal">
+      <div class="card-icon">⚖️</div>
+      <h3>Parité 50/50</h3>
+      <p>Chaque classe CHAMS respecte strictement la parité filles-garçons. Ce n'est pas un bonus, c'est une règle fondamentale du dispositif.</p>
+    </div>
+    <div class="card yellow reveal">
+      <div class="card-icon">🔬</div>
+      <h3>Domaines couverts</h3>
+      <p>Mathématiques, sciences physiques et de la vie, technologie et numérique — les quatre piliers des métiers d'avenir.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-inner">
+    <div class="reveal">
+      <div class="stat-num green">+3h</div>
+      <div class="stat-label">d'activités scientifiques par semaine en plus du programme classique</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num yellow">50%</div>
+      <div class="stat-label">de filles garanties dans chaque classe CHAMS — une parité imposée</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num red">42%</div>
+      <div class="stat-label">seulement des filles choisissent maths en terminale — les CHAMS veulent changer cela</div>
+    </div>
+  </div>
+</div>
+
+<!-- PEDAGOGIE -->
+<section id="pedagogie">
+  <p class="section-label reveal">02 — Apprendre autrement</p>
+  <h2 class="reveal">Une pédagogie <em>active</em> et concrète</h2>
+  <p class="reveal" style="color:var(--muted); max-width:600px; margin-bottom:2rem;">Les CHAMS ne sont pas une classe de plus. Ce sont des expériences, des projets, des rencontres qui transforment la façon de voir les sciences.</p>
+
+  <div class="pedagogy-list">
+    <div class="peda-item reveal">
+      <div class="peda-num">01</div>
+      <div class="peda-text">
+        <h3>Ateliers scientifiques</h3>
+        <p>En mathématiques, sciences et technologie, animés par les professeurs du collège. Des séances pratiques, expérimentales, loin des cours magistraux.</p>
+      </div>
+    </div>
+    <div class="peda-item reveal">
+      <div class="peda-num">02</div>
+      <div class="peda-text">
+        <h3>Projet collectif annuel</h3>
+        <p>Un grand projet de l'année encadré par des professionnels — scientifiques, ingénieurs, chercheurs — qui ancre les apprentissages dans la réalité du monde professionnel.</p>
+      </div>
+    </div>
+    <div class="peda-item reveal">
+      <div class="peda-num">03</div>
+      <div class="peda-text">
+        <h3>Sorties de terrain</h3>
+        <p>Visites de laboratoires, d'usines, d'universités pour découvrir les métiers scientifiques et voir la recherche en action — pas dans un livre, mais en vrai.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ENSEIGNANTS -->
+<section id="enseignants">
+  <p class="section-label reveal">03 — L'encadrement</p>
+  <h2 class="reveal">Des intervenants <em>variés</em>, de qualité</h2>
+  <p class="reveal" style="color:var(--muted); max-width:600px;">Les cours et activités CHAMS sont assurés par une équipe pluridisciplinaire qui croise les regards sur les sciences.</p>
+
+  <div class="teachers-grid">
+    <div class="teacher-card reveal">
+      <div class="teacher-icon t1">👨‍🏫</div>
+      <h3>Professeurs du collège</h3>
+      <p>Enseignants de maths, sciences et technologie — le socle pédagogique de la classe, au plus proche des élèves.</p>
+    </div>
+    <div class="teacher-card reveal">
+      <div class="teacher-icon t2">🎓</div>
+      <h3>Enseignants du supérieur</h3>
+      <p>Maîtres de conférences, doctorants, étudiants en master — ils apportent un regard différent, plus proche de la recherche.</p>
+    </div>
+    <div class="teacher-card reveal">
+      <div class="teacher-icon t3">🏭</div>
+      <h3>Professionnels</h3>
+      <p>Ingénieurs, chercheurs, entrepreneurs scientifiques — pour donner du sens aux apprentissages et ouvrir des horizons de carrière concrets.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EGALITE -->
+<section id="egalite">
+  <p class="section-label reveal">04 — Filles & sciences</p>
+  <h2 class="reveal">Briser les stéréotypes <em>dès le collège</em></h2>
+
+  <div class="equality-section reveal">
+    <div class="eq-grid">
+      <div>
+        <p style="margin-bottom:1.5rem; color:var(--muted);">En France, les chiffres stagnent depuis 20 ans. Les CHAMS font partie du plan d'action gouvernemental pour inverser cette tendance dès le collège, avant que les orientations ne se figent.</p>
+
+        <div style="margin-bottom:1.25rem;">
+          <div class="eq-label">
+            <span>Filles choisissant maths en Terminale</span>
+            <span style="color:var(--accent2)">42%</span>
+          </div>
+          <div class="eq-bar"><div class="eq-bar-fill" style="width:42%"></div></div>
+        </div>
+
+        <div style="margin-bottom:1.25rem;">
+          <div class="eq-label">
+            <span>Femmes en écoles d'ingénieurs</span>
+            <span style="color:var(--accent2)">25%</span>
+          </div>
+          <div class="eq-bar"><div class="eq-bar-fill" style="width:25%"></div></div>
+        </div>
+
+        <div>
+          <div class="eq-label">
+            <span>Femmes dans le numérique</span>
+            <span style="color:var(--accent2)">25%</span>
+          </div>
+          <div class="eq-bar"><div class="eq-bar-fill" style="width:25%"></div></div>
+        </div>
+
+        <div style="margin-top:2rem; background:rgba(79,255,176,0.08); border:1px solid rgba(79,255,176,0.2); border-radius:4px; padding:1.25rem;">
+          <div style="font-family:'Space Mono',monospace; font-size:0.7rem; color:var(--accent); margin-bottom:0.5rem; letter-spacing:0.1em;">OBJECTIF CHAMS</div>
+          <div class="eq-label" style="margin-bottom:0.3rem;"><span>Parité dans chaque classe</span><span style="color:var(--accent)">50/50</span></div>
+          <div class="eq-bar"><div class="eq-bar-fill" style="width:50%; background:var(--accent)"></div></div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <p style="font-family:'DM Serif Display',serif; font-size:1.4rem; margin-bottom:2rem; font-style:italic;">La science est pour tout le monde.</p>
+        <div class="parity-visual">
+          <div class="parity-block">👩‍🔬</div>
+          <div class="parity-block">👨‍🔬</div>
+          <div class="parity-block">👩‍💻</div>
+          <div class="parity-block">👨‍💻</div>
+          <div class="parity-block">👩‍🏫</div>
+          <div class="parity-block">👨‍🏫</div>
+          <div class="parity-block">👩‍🚀</div>
+          <div class="parity-block">👨‍🚀</div>
+        </div>
+        <p style="margin-top:2rem; font-family:'Space Mono',monospace; font-size:0.75rem; color:var(--muted); line-height:1.8;">Réduire les inégalités salariales · Diversifier les métiers · Ouvrir des opportunités · Changer les représentations</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">CHAMS<span>.</span></span>
+  Classes à Horaires Aménagés en Mathématiques et Sciences<br>
+  <span style="margin-top:0.5rem; display:block;">Un dispositif d'excellence · Parité 50/50 · Passion scientifique</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
